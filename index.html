@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Strength Validator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  </head>
+  <body class="bg-gray-100 font-sans p-8">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">
+        Password Strength Checker
+      </h2>
+      <form id="password-form" action="/submit" method="POST">
+        <div class="mb-4">
+          <label for="password" class="block text-gray-700 font-medium"
+            >Enter Password:</label
+          >
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your password"
+          />
+        </div>
+
+        <div id="password-strength" class="mb-4 text-sm font-semibold"></div>
+
+        <div id="password-requirements" class="space-y-2">
+          <p id="min-length" class="text-sm text-red-600">
+            Minimum 12 characters
+          </p>
+          <p id="lowercase" class="text-sm text-red-600">
+            At least one lowercase letter
+          </p>
+          <p id="uppercase" class="text-sm text-red-600">
+            At least one uppercase letter
+          </p>
+          <p id="number" class="text-sm text-red-600">At least one number</p>
+          <p id="special" class="text-sm text-red-600">
+            At least one special character (!@#$%^&*)
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          id="submit-btn"
+          class="w-full py-2 bg-gray-500 text-white rounded-lg mt-4 disabled:opacity-50"
+          disabled
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $("#password").on("input", function () {
+          var password = $(this).val();
+          var strength = $("#password-strength");
+          var valid = true;
+
+          // Password Strength Indicators
+          if (password.length < 12) {
+            $("#min-length")
+              .removeClass("text-green-600")
+              .addClass("text-red-600");
+            valid = false;
+          } else {
+            $("#min-length")
+              .removeClass("text-red-600")
+              .addClass("text-green-600");
+          }
+
+          if (!password.match(/[a-z]/)) {
+            $("#lowercase")
+              .removeClass("text-green-600")
+              .addClass("text-red-600");
+            valid = false;
+          } else {
+            $("#lowercase")
+              .removeClass("text-red-600")
+              .addClass("text-green-600");
+          }
+
+          if (!password.match(/[A-Z]/)) {
+            $("#uppercase")
+              .removeClass("text-green-600")
+              .addClass("text-red-600");
+            valid = false;
+          } else {
+            $("#uppercase")
+              .removeClass("text-red-600")
+              .addClass("text-green-600");
+          }
+
+          if (!password.match(/\d/)) {
+            $("#number").removeClass("text-green-600").addClass("text-red-600");
+            valid = false;
+          } else {
+            $("#number").removeClass("text-red-600").addClass("text-green-600");
+          }
+
+          if (!password.match(/[!@#$%^&*()]/)) {
+            $("#special")
+              .removeClass("text-green-600")
+              .addClass("text-red-600");
+            valid = false;
+          } else {
+            $("#special")
+              .removeClass("text-red-600")
+              .addClass("text-green-600");
+          }
+
+          // Provide overall feedback
+          if (valid) {
+            strength
+              .removeClass()
+              .addClass("text-green-600 font-bold")
+              .text("Strong Password");
+            $("#submit-btn")
+              .prop("disabled", false)
+              .removeClass("bg-gray-500")
+              .addClass("bg-green-500");
+          } else {
+            strength
+              .removeClass()
+              .addClass("text-red-600 font-bold")
+              .text("Weak Password");
+            $("#submit-btn")
+              .prop("disabled", true)
+              .removeClass("bg-green-500")
+              .addClass("bg-gray-500");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
